@@ -1,0 +1,65 @@
+CREATE TABLE IF NOT EXISTS folders(
+ID INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(100),
+accessed DATE,
+changed DATE,
+created DATE
+);
+
+CREATE TABLE IF NOT EXISTS files(
+ID INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+foldersID INT UNSIGNED NOT NULL,
+name VARCHAR(100),
+accessed DATE,
+changed DATE,
+created DATE,
+size_KB INT UNSIGNED
+);
+
+SELECT name FROM files WHERE foldersID = 1;
+
+SELECT folders.name, files.name FROM folders INNER JOIN files ON folders.ID WHERE foldersID = 1;
+
+SELECT folders.name, files.name FROM folders INNER JOIN files ON folders.ID WHERE YEAR(files.accessed) < YEAR(CURRENT_DATE());
+
+SELECT folders.name, files.name FROM folders INNER JOIN files ON folders.ID = files.foldersID;
+
+SELECT folders.name, files.name FROM folders INNERE JOIN files ON folders.ID = files.foldersID ORDER BY size DESC;
+
+SELECT file.name, folder.name FROM folders INNER JOIN files ON folders.ID = files.foldersID;
+
+SELECT files.name, folders.name FROM folders INNER JOIN files ON folders.ID = files.foldersID ORDER BY folders.name AND file.size
+
+SELECT files.name, folders.name FROM folders INNER JOIN files ON folders.ID = files.foldersID WHERE folders.created > SUBDATE(CURRENT_DATE(), INTERVAL 1 WEEK);
+
+SELECT folders.name, (SELECT SUM(file.size_KB) FROM files WHERE files.foldersID = 1) FROM folders WHERE folders.ID = ID;
+
+SELECT name FROM folders
+		UNION
+SELECT name from FILES;
+
+SELECT name, created, accessed FROM folders
+		UNION
+SELECT name, created, accessed FROM files;
+
+
+CREATE TABLE IF NOT EXISTS author(
+ID INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+first_name VARCHAR(10),
+surname VARCHAR(10)
+);
+
+CREATE TABLE IF NOT EXISTS orders(
+ID INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+authorID INT UNSIGNED,
+bookID INT UNSIGNED
+);
+
+CREATE TABLE IF NOT EXISTS book(
+ID INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+title VARCHAR(50)
+);
+
+SELECT author.first_name, author.surname, book.title FROM author 
+INNER JOIN orders ON author.ID = orders.authorID
+INNER JOIN book ON orders.ID = book.ID;
